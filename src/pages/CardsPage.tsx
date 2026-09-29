@@ -7,6 +7,7 @@ import { ApiError } from '../api/client'
 
 export default function CardsPage() {
   const [cards, setCards] = useState<CardResponse[]>([])
+  const [estimados, setEstimados] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
@@ -15,12 +16,23 @@ export default function CardsPage() {
   const [alias, setAlias] = useState('')
   const [cupoTotal, setCupoTotal] = useState('')
   const [tasaEA, setTasaEA] = useState('')
+  const [cargosFijosMensuales, setCargosFijosMensuales] = useState('')
 
   const cargar = () => {
     setLoading(true)
     cardsApi
       .listar()
-      .then(setCards)
+      .then((lista) => {
+        setCards(lista)
+        // El estimado se pide aparte: es un cálculo bajo demanda que nunca
+        // se guarda, no un campo del listado de tarjetas.
+        lista.forEach((c) => {
+          cardsApi
+            .estimarMes(c.id)
+            .then((est) => setEstimados((prev) => ({ ...prev, [c.id]: est.total })))
+            .catch(() => { /* si falla el estimado de una tarjeta, no rompe el listado */ })
+        })
+      })
       .catch((e: ApiError) => setError(e.message))
       .finally(() => setLoading(false))
   }
@@ -45,12 +57,14 @@ export default function CardsPage() {
         banco,
         alias,
         cupoTotal: Number(cupoTotal) || 0,
-        tasaEA: Number(tasaEA) || 0
+        tasaEA: Number(tasaEA) || 0,
+        cargosFijosMensuales: Number(cargosFijosMensuales) || 0
       })
       setBanco('')
       setAlias('')
       setCupoTotal('')
       setTasaEA('')
+      setCargosFijosMensuales('')
       setShowForm(false)
       cargar()
     } catch (e) {
@@ -82,6 +96,7 @@ export default function CardsPage() {
                   <th className="num">Cupo total</th>
                   <th className="num">Tasa E.A.</th>
                   <th className="num">Saldo en líneas</th>
+                  <th className="num">Aprox. este mes</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -94,6 +109,7 @@ export default function CardsPage() {
                     <td className="num">{fmt(c.cupoTotal)}</td>
                     <td className="num">{c.tasaEA}%</td>
                     <td className="num">{fmt(c.saldoTotalLineas)}</td>
+                    <td className="num">{estimados[c.id] != null ? fmt(estimados[c.id]) : '…'}</td>
                     <td>
                       <Link to={`/cards/${c.id}`}>Ver líneas →</Link>
                     </td>
@@ -144,6 +160,14 @@ export default function CardsPage() {
                   value={tasaEA}
                   onChange={(e) => setTasaEA(e.target.value)}
                   required
+                />
+              </div>
+              <div className="field">
+                <label>Cargos fijos mensuales (manejo + seguro, etc.)</label>
+                <input
+                  type="number"
+                  value={cargosFijosMensuales}
+                  onChange={(e) => setCargosFijosMensuales(e.target.value)}
                 />
               </div>
               <div style={{ display: 'flex', gap: 8 }}>

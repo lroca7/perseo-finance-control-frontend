@@ -9,7 +9,8 @@ import type {
   ComparisonResponse,
   CreateStatementRequest,
   StatementResponse,
-  ParsedStatementResponse
+  ParsedStatementResponse,
+  EstimatedMonthlyPaymentResponse
 } from './types'
 
 // NOTA: mientras no exista login (HU-T.8 pendiente), se usa un userId fijo
@@ -24,7 +25,9 @@ export const cardsApi = {
     api.post<CardResponse>(`/cards?userId=${DEV_USER_ID}`, body),
   actualizar: (cardId: string, body: CreateCardRequest) =>
     api.put<CardResponse>(`/cards/${cardId}`, body),
-  eliminar: (cardId: string) => api.delete<void>(`/cards/${cardId}`)
+  eliminar: (cardId: string) => api.delete<void>(`/cards/${cardId}`),
+  estimarMes: (cardId: string) =>
+    api.get<EstimatedMonthlyPaymentResponse>(`/cards/${cardId}/pago-estimado-mes`)
 }
 
 export const creditLinesApi = {

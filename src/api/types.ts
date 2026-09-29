@@ -11,6 +11,7 @@ export interface CardResponse {
   alias: string
   cupoTotal: number
   tasaEA: number
+  cargosFijosMensuales: number
   saldoTotalLineas: number
 }
 
@@ -19,6 +20,19 @@ export interface CreateCardRequest {
   alias: string
   cupoTotal: number
   tasaEA: number
+  cargosFijosMensuales: number
+}
+
+export interface EstimatedLinePayment {
+  creditLineId: string
+  nombre: string
+  cuotaMes: number
+}
+
+export interface EstimatedMonthlyPaymentResponse {
+  porLinea: EstimatedLinePayment[]
+  cargosFijos: number
+  total: number
 }
 
 export interface CreditLineResponse {

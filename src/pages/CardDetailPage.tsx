@@ -6,7 +6,8 @@ import type {
   CreditLineResponse,
   AmortizationType,
   StatementResponse,
-  ParsedStatementResponse
+  ParsedStatementResponse,
+  EstimatedMonthlyPaymentResponse
 } from '../api/types'
 import { fmt } from '../utils/format'
 import { ApiError } from '../api/client'
@@ -16,12 +17,15 @@ export default function CardDetailPage() {
   const [card, setCard] = useState<CardResponse | null>(null)
   const [lines, setLines] = useState<CreditLineResponse[]>([])
   const [statements, setStatements] = useState<StatementResponse[]>([])
+  const [estimado, setEstimado] = useState<EstimatedMonthlyPaymentResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [showStatementForm, setShowStatementForm] = useState(false)
   const [preview, setPreview] = useState<ParsedStatementResponse | null>(null)
   const [parsing, setParsing] = useState(false)
   const [bancoParser, setBancoParser] = useState<'DAVIVIENDA' | 'BANCOLOMBIA'>('DAVIVIENDA')
+  const [editandoCargos, setEditandoCargos] = useState(false)
+  const [cargosFijosInput, setCargosFijosInput] = useState('')
 
   const [nombre, setNombre] = useState('')
   const [saldoPendiente, setSaldoPendiente] = useState('')
@@ -42,12 +46,15 @@ export default function CardDetailPage() {
     Promise.all([
       cardsApi.obtener(cardId),
       creditLinesApi.listarPorTarjeta(cardId),
-      statementsApi.listarPorTarjeta(cardId)
+      statementsApi.listarPorTarjeta(cardId),
+      cardsApi.estimarMes(cardId)
     ])
-      .then(([c, l, s]) => {
+      .then(([c, l, s, est]) => {
         setCard(c)
         setLines(l)
         setStatements(s)
+        setEstimado(est)
+        setCargosFijosInput(String(c.cargosFijosMensuales))
       })
       .catch((e: ApiError) => setError(e.message))
   }
@@ -58,6 +65,23 @@ export default function CardDetailPage() {
     if (!card) return
     setBancoParser(card.banco.toLowerCase().includes('bancolombia') ? 'BANCOLOMBIA' : 'DAVIVIENDA')
   }, [card])
+
+  const guardarCargosFijos = async () => {
+    if (!card || !cardId) return
+    try {
+      await cardsApi.actualizar(cardId, {
+        banco: card.banco,
+        alias: card.alias,
+        cupoTotal: card.cupoTotal,
+        tasaEA: card.tasaEA,
+        cargosFijosMensuales: Number(cargosFijosInput) || 0
+      })
+      setEditandoCargos(false)
+      cargar()
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : 'No se pudo actualizar los cargos fijos')
+    }
+  }
 
   const eliminarLinea = async (lineId: string, nombre: string) => {
     if (!window.confirm(`¿Eliminar la línea "${nombre}"? Esto borra también sus abonos extraordinarios.`)) return
@@ -182,6 +206,49 @@ export default function CardDetailPage() {
       </p>
 
       {error && <div className="warning">⚠ {error}</div>}
+
+      <div className="panel">
+        <h2 style={{ fontSize: 15.5, marginBottom: 2 }}>Pago aproximado del mes en curso</h2>
+        <p className="muted" style={{ marginBottom: 12 }}>
+          Estimado tuyo, calculado con la cuota #1 de cada línea activa + cargos fijos.
+          No es el pago mínimo oficial que exige el banco.
+        </p>
+
+        {estimado && (
+          <>
+            {estimado.porLinea.map((l) => (
+              <div key={l.creditLineId} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
+                <span className="muted">{l.nombre}</span>
+                <span>{fmt(l.cuotaMes)}</span>
+              </div>
+            ))}
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
+              <span className="muted">Cargos fijos mensuales</span>
+              {editandoCargos ? (
+                <span style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  <input
+                    type="number"
+                    value={cargosFijosInput}
+                    onChange={(e) => setCargosFijosInput(e.target.value)}
+                    style={{ width: 110 }}
+                  />
+                  <button className="primary" onClick={guardarCargosFijos}>Guardar</button>
+                  <button className="ghost" onClick={() => setEditandoCargos(false)}>Cancelar</button>
+                </span>
+              ) : (
+                <span>
+                  {fmt(estimado.cargosFijos)}{' '}
+                  <button className="ghost" onClick={() => setEditandoCargos(true)}>Editar</button>
+                </span>
+              )}
+            </div>
+            <div style={{ borderTop: '1px solid var(--border)', marginTop: 8, paddingTop: 8, display: 'flex', justifyContent: 'space-between' }}>
+              <b>Total aproximado</b>
+              <b>{fmt(estimado.total)}</b>
+            </div>
+          </>
+        )}
+      </div>
 
       <div className="panel">
         <h2 style={{ fontSize: 15.5, marginBottom: 10 }}>Líneas de crédito</h2>
