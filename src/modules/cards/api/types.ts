@@ -139,11 +139,3 @@ export interface ComparisonResponse {
   ahorroIntereses: number
   mesesAhorrados: number
 }
-
-export interface ApiFieldError {
-  field: string
-  message: string
-}
-export interface ApiErrorResponse {
-  errors: ApiFieldError[]
-}

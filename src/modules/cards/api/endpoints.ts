@@ -1,4 +1,5 @@
-import { api } from './client'
+import { api } from '../../../shared/api/client'
+import { DEV_USER_ID } from '../../../shared/config/devUser'
 import type {
   CardResponse,
   CreateCardRequest,
@@ -12,11 +13,6 @@ import type {
   ParsedStatementResponse,
   EstimatedMonthlyPaymentResponse
 } from './types'
-
-// NOTA: mientras no exista login (HU-T.8 pendiente), se usa un userId fijo
-// de desarrollo. Cuando se agregue auth, esto se reemplaza por el usuario
-// resuelto del token y deja de viajar como query param.
-export const DEV_USER_ID = '00000000-0000-0000-0000-000000000001'
 
 export const cardsApi = {
   listar: () => api.get<CardResponse[]>(`/cards?userId=${DEV_USER_ID}`),

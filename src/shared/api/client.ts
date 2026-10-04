@@ -11,6 +11,12 @@ export class ApiError extends Error {
   }
 }
 
+/** Une los errores del backend en un texto; si no trae campo (error de negocio) muestra solo el mensaje. */
+function buildMessage(body: ApiErrorResponse | null, fallback: string): string {
+  const parts = body?.errors?.map((e) => (e.field ? `${e.field}: ${e.message}` : e.message))
+  return parts && parts.length > 0 ? parts.join(', ') : fallback
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const res = await fetch(`/api${path}`, {
     ...options,
@@ -27,9 +33,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     } catch {
       // el backend no siempre devuelve JSON (ej. 404 genérico de Spring)
     }
-    const message = body?.errors?.map((e) => `${e.field}: ${e.message}`).join(', ')
-      ?? `Error ${res.status} al llamar ${path}`
-    throw new ApiError(message, res.status, body?.errors ?? [])
+    throw new ApiError(buildMessage(body, `Error ${res.status} al llamar ${path}`), res.status, body?.errors ?? [])
   }
 
   // 204 No Content no trae body
@@ -40,10 +44,8 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
 export const api = {
   get: <T>(path: string) => request<T>(path, { method: 'GET' }),
-  post: <T>(path: string, body: unknown) =>
-    request<T>(path, { method: 'POST', body: JSON.stringify(body) }),
-  put: <T>(path: string, body: unknown) =>
-    request<T>(path, { method: 'PUT', body: JSON.stringify(body) }),
+  post: <T>(path: string, body: unknown) => request<T>(path, { method: 'POST', body: JSON.stringify(body) }),
+  put: <T>(path: string, body: unknown) => request<T>(path, { method: 'PUT', body: JSON.stringify(body) }),
   delete: <T>(path: string) => request<T>(path, { method: 'DELETE' }),
   /** Para multipart/form-data (ej. subir un PDF). No forzar Content-Type: el
    * navegador debe poner el boundary correcto solo. */
@@ -56,9 +58,7 @@ export const api = {
       } catch {
         // sin body JSON
       }
-      const message = body?.errors?.map((e) => `${e.field}: ${e.message}`).join(', ')
-        ?? `Error ${res.status} al subir el archivo`
-      throw new ApiError(message, res.status, body?.errors ?? [])
+      throw new ApiError(buildMessage(body, `Error ${res.status} al subir el archivo`), res.status, body?.errors ?? [])
     }
     return res.json() as Promise<T>
   }

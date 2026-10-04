@@ -1,0 +1,70 @@
+/* Estilos del módulo de ahorro. Reutilizan los tokens de src/styles/global.css. */
+
+.sv-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.sv-subtitle { font-size: 14px; margin: 0 0 10px; }
+.sv-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0 12px; }
+.sv-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.sv-editor { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: 16px; align-items: start; }
+@media (max-width: 860px) { .sv-editor { grid-template-columns: 1fr; } }
+
+/* Tarjetas de metas */
+.sv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.sv-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sv-card-head { display: flex; justify-content: space-between; align-items: center; }
+.sv-card-icon { font-size: 24px; line-height: 1; }
+.sv-card-title { font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 16px; font-weight: 600; color: var(--text); text-decoration: none; }
+.sv-card-title:hover { color: var(--accent); }
+.sv-card-amounts { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-top: 6px; flex-wrap: wrap; }
+.sv-card-msg { font-size: 12.5px; }
+.sv-msg-ok { color: var(--good); }
+.sv-msg-late { color: var(--bad); }
+.sv-quick { display: flex; flex-direction: column; gap: 8px; }
+.sv-quick-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+
+/* Barra de avance */
+.sv-progress { height: 8px; background: var(--bg2); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+.sv-progress-fill { height: 100%; border-radius: 999px; transition: width 0.3s ease; }
+.sv-progress-fill.sv-ok { background: var(--accent); }
+.sv-progress-fill.sv-late { background: var(--bad); }
+.sv-progress-fill.sv-done { background: var(--good); }
+.sv-progress-fill.sv-none { background: var(--muted); }
+
+/* Estados */
+.sv-badge { font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid transparent; white-space: nowrap; }
+.sv-badge.sv-ok { background: rgba(232, 163, 61, 0.16); color: var(--accent2); border-color: rgba(232, 163, 61, 0.4); }
+.sv-badge.sv-late { background: rgba(232, 106, 92, 0.14); color: var(--bad); border-color: rgba(232, 106, 92, 0.4); }
+.sv-badge.sv-done { background: rgba(95, 203, 154, 0.16); color: var(--good); border-color: rgba(95, 203, 154, 0.4); }
+.sv-badge.sv-none { background: transparent; color: var(--muted); border-color: var(--border); }
+
+/* Métricas */
+.sv-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.sv-metric { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.sv-metric-label { font-size: 12px; color: var(--muted); }
+.sv-metric-value { font-size: 21px; font-weight: 700; font-family: 'Space Grotesk', 'Inter', sans-serif; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.sv-metric-hint { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.sv-tone-good .sv-metric-value { color: var(--good); }
+.sv-tone-bad .sv-metric-value { color: var(--bad); }
+.sv-tone-accent { border-color: var(--accent); background: linear-gradient(135deg, rgba(232, 163, 61, 0.14), rgba(95, 203, 154, 0.08)); }
+.sv-tone-accent .sv-metric-value { color: var(--accent2); }
+
+/* Proyección */
+.sv-insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.sv-insight { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.sv-insight-label { font-size: 12px; color: var(--muted); }
+.sv-insight-main { font-size: 17px; font-weight: 600; margin: 4px 0 2px; font-family: 'Space Grotesk', 'Inter', sans-serif; }
+
+/* Avisos, etiquetas, signos */
+.sv-note { background: rgba(232, 163, 61, 0.1); border: 1px solid rgba(232, 163, 61, 0.45); border-radius: 10px; padding: 10px 14px; font-size: 12.5px; margin-bottom: 14px; }
+.sv-chip { display: inline-block; margin-left: 8px; font-size: 10.5px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+.sv-chip-ok { border-color: rgba(95, 203, 154, 0.5); color: var(--good); }
+.sv-pos { color: var(--good); }
+.sv-neg { color: var(--bad); }
+.sv-actions { display: flex; gap: 6px; justify-content: flex-end; }

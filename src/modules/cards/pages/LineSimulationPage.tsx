@@ -2,8 +2,8 @@ import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { creditLinesApi, simulationApi } from '../api/endpoints'
 import type { CreditLineResponse, ComparisonResponse, ExtraPaymentResponse, PaymentStrategy } from '../api/types'
-import { fmt } from '../utils/format'
-import { ApiError } from '../api/client'
+import { fmt } from '../../../shared/utils/format'
+import { ApiError } from '../../../shared/api/client'
 
 const MONTH_ABBR = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
 

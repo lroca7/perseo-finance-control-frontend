@@ -1,0 +1,17 @@
+/* Menú principal de módulos (Tarjetas | Ahorro | …). */
+.app-nav { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.app-nav a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+.app-nav a:hover { color: var(--text); }
+.app-nav a.active {
+  color: var(--accent2);
+  background: rgba(232, 163, 61, 0.14);
+  border-color: rgba(232, 163, 61, 0.4);
+}

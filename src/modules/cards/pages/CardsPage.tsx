@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { cardsApi } from '../api/endpoints'
 import type { CardResponse } from '../api/types'
-import { fmt } from '../utils/format'
-import { ApiError } from '../api/client'
+import { fmt } from '../../../shared/utils/format'
+import { ApiError } from '../../../shared/api/client'
 
 export default function CardsPage() {
   const [cards, setCards] = useState<CardResponse[]>([])
