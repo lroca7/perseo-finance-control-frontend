@@ -4,7 +4,8 @@ import '../shared/styles/nav.css'
 /** Cada módulo nuevo se agrega aquí con su prefijo de ruta (los de "/" van por exclusión). */
 const MODULES = [
   { label: 'Tarjetas', to: '/', prefix: null },
-  { label: 'Ahorro', to: '/ahorro', prefix: '/ahorro' }
+  { label: 'Ahorro', to: '/ahorro', prefix: '/ahorro' },
+  { label: 'Gastos', to: '/gastos', prefix: '/gastos' }
 ]
 
 export default function App() {

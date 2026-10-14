@@ -1,0 +1,40 @@
+/* Estilos del módulo de gastos (prototipo HU-1). Reutilizan tokens de global.css. */
+
+.ex-month { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.ex-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0 12px; }
+.ex-form .field { margin-bottom: 0; }
+
+.ex-table-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.ex-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.ex-filters input { width: 200px; }
+.ex-filters select { width: 160px; }
+
+.ex-proy { background: none; border: none; color: var(--text); font: inherit; cursor: pointer; padding: 2px 4px; border-radius: 6px; white-space: nowrap; }
+.ex-proy:hover { background: var(--bg2); color: var(--accent2); }
+.ex-pasado { background: rgba(232, 106, 92, 0.07); }
+.ex-neg { color: var(--bad); }
+.ex-pos { color: var(--good); }
+.ex-inactiva { opacity: 0.65; }
+
+.ex-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px;
+  z-index: 50;
+  overflow-y: auto;
+}
+.ex-modal {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  width: min(640px, 100%);
+}
+.ex-modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.ex-new-cat { display: flex; gap: 8px; margin-bottom: 12px; }
+.ex-new-cat input { flex: 1; }
