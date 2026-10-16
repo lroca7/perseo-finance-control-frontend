@@ -38,6 +38,13 @@ export function MonthSavingsPanel({ filas, sugerencias, onSave }: AhorroProps) {
   const set = (key: string, patch: Partial<AhorroDraft>) =>
     setRows((rs) => rs.map((r) => (r.key === key ? { ...r, ...patch } : r)))
 
+  const quitar = (key: string) => {
+    const row = rows.find((x) => x.key === key)
+    const nombre = row?.nombre.trim() || 'esta fila'
+    if (!key.startsWith('nueva-') && !window.confirm(`¿Quitar el ahorro "${nombre}"? Se eliminará al guardar el mes.`)) return
+    setRows((rs) => rs.filter((x) => x.key !== key))
+  }
+
   const guardar = () => {
     try {
       const items = rows.map((r) => {
@@ -127,8 +134,8 @@ export function MonthSavingsPanel({ filas, sugerencias, onSave }: AhorroProps) {
                   />
                 </td>
                 <td>
-                  <button className="secondary sm" onClick={() => setRows((rs) => rs.filter((x) => x.key !== r.key))} aria-label="Quitar fila">
-                    🗑
+                  <button className="remove" onClick={() => quitar(r.key)} aria-label="Quitar fila">
+                    ✕
                   </button>
                 </td>
               </tr>
@@ -179,6 +186,13 @@ export function DebtsPanel({ filas, sugerencias, onSave }: DeudaProps) {
 
   const set = (key: string, patch: Partial<DeudaDraft>) =>
     setRows((rs) => rs.map((r) => (r.key === key ? { ...r, ...patch } : r)))
+
+  const quitar = (key: string) => {
+    const row = rows.find((x) => x.key === key)
+    const nombre = row?.nombre.trim() || 'esta fila'
+    if (!key.startsWith('nueva-') && !window.confirm(`¿Quitar la deuda "${nombre}"? Se eliminará al guardar el mes.`)) return
+    setRows((rs) => rs.filter((x) => x.key !== key))
+  }
 
   const guardar = () => {
     try {
@@ -269,8 +283,8 @@ export function DebtsPanel({ filas, sugerencias, onSave }: DeudaProps) {
                   />
                 </td>
                 <td>
-                  <button className="secondary sm" onClick={() => setRows((rs) => rs.filter((x) => x.key !== r.key))} aria-label="Quitar fila">
-                    🗑
+                  <button className="remove" onClick={() => quitar(r.key)} aria-label="Quitar fila">
+                    ✕
                   </button>
                 </td>
               </tr>

@@ -54,7 +54,6 @@ h1, h2, h3 {
 a { color: var(--accent); }
 
 .wrap {
-  max-width: 1080px;
   margin: 0 auto;
   padding: 26px 18px 60px;
 }

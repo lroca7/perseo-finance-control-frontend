@@ -28,7 +28,7 @@ export default function ExpenseForm(p: Props) {
   const valorNum = parseNumber(p.valor)
 
   const guardar = () => {
-    if (fechaInvalida) return setError('Revisa la fecha (formato dd/mm/aaaa).')
+    if (fechaInvalida) return setError('Revisa la fecha.')
     if (!p.fecha) return setError('La fecha es obligatoria.')
     if (valorNum === null || !Number.isInteger(valorNum) || valorNum <= 0)
       return setError('El valor debe ser un número entero mayor a 0.')

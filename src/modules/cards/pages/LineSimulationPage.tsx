@@ -71,8 +71,9 @@ export default function LineSimulationPage() {
     }
   }
 
-  const eliminarAbono = async (id: string) => {
+  const eliminarAbono = async (id: string, detalle: string) => {
     if (!lineId) return
+    if (!window.confirm(`¿Eliminar ${detalle}?`)) return
     try {
       await simulationApi.eliminarAbono(lineId, id)
       cargar()
@@ -121,7 +122,7 @@ export default function LineSimulationPage() {
                   <td className="num">{fmt(a.monto)}</td>
                   <td>{a.estrategia === 'REDUCIR_PLAZO' ? 'Reducir plazo' : 'Reducir cuota'}</td>
                   <td>
-                    <button className="remove" onClick={() => eliminarAbono(a.id)}>✕</button>
+                    <button className="remove" onClick={() => eliminarAbono(a.id, `el abono de la cuota ${a.numeroCuota} por ${fmt(a.monto)}`)}>✕</button>
                   </td>
                 </tr>
               ))}

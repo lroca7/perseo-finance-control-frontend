@@ -74,10 +74,10 @@ export default function ExpenseTable({ gastos, nombreCategoria, onEditar, onElim
                         <span className="muted" style={{ fontSize: 12, marginRight: 6 }}>
                           ¿Eliminar?
                         </span>
-                        <button className="danger sm" onClick={() => { onEliminar(g.id); setConfirmando(null) }}>
+                        <button className="remove" onClick={() => { onEliminar(g.id); setConfirmando(null) }}>
                           Sí
                         </button>{' '}
-                        <button className="secondary sm" onClick={() => setConfirmando(null)}>
+                        <button onClick={() => setConfirmando(null)}>
                           No
                         </button>
                       </>
@@ -86,8 +86,8 @@ export default function ExpenseTable({ gastos, nombreCategoria, onEditar, onElim
                         <button className="secondary sm" onClick={() => onEditar(g)} aria-label="Editar gasto">
                           ✎
                         </button>{' '}
-                        <button className="secondary sm" onClick={() => setConfirmando(g.id)} aria-label="Eliminar gasto">
-                          🗑
+                        <button className="remove" onClick={() => setConfirmando(g.id)} aria-label="Eliminar gasto">
+                          ✕
                         </button>
                       </>
                     )}

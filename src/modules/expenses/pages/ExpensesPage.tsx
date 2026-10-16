@@ -326,28 +326,30 @@ export default function ExpensesPage() {
 
       {data && (
         <>
-          <IncomesPanel
-            key={`ing-${mk}`}
-            anio={anio}
-            mes={mes}
-            filas={data.ingresos.filas}
-            sugerencias={data.sugerenciasIngresos}
-            onSave={(ingresos) =>
-              guardarBloque('los ingresos', expensesApi.months.saveIncomes(DEV_USER_ID, anio, mes, ingresos))
-            }
-          />
+          <div className="ex-blocks-grid">
+            <IncomesPanel
+              key={`ing-${mk}`}
+              anio={anio}
+              mes={mes}
+              filas={data.ingresos.filas}
+              sugerencias={data.sugerenciasIngresos}
+              onSave={(ingresos) =>
+                guardarBloque('los ingresos', expensesApi.months.saveIncomes(DEV_USER_ID, anio, mes, ingresos))
+              }
+            />
 
-          <BillsPanel
-            key={`fac-${mk}`}
-            anio={anio}
-            mes={mes}
-            filas={data.facturas.filas}
-            categorias={billCats}
-            onSave={(facturas) =>
-              guardarBloque('las facturas', expensesApi.months.saveBills(DEV_USER_ID, anio, mes, facturas))
-            }
-            onGestionarCategorias={() => abrirCats('facturas')}
-          />
+            <BillsPanel
+              key={`fac-${mk}`}
+              anio={anio}
+              mes={mes}
+              filas={data.facturas.filas}
+              categorias={billCats}
+              onSave={(facturas) =>
+                guardarBloque('las facturas', expensesApi.months.saveBills(DEV_USER_ID, anio, mes, facturas))
+              }
+              onGestionarCategorias={() => abrirCats('facturas')}
+            />
+          </div>
 
           <ExpenseForm
             fecha={fecha}
@@ -365,42 +367,46 @@ export default function ExpensesPage() {
             onCancelarEdicion={limpiarForm}
           />
 
-          <BudgetPanel
-            categorias={categoriasVista}
-            gastosDelMes={gastosVista}
-            budgets={budgetsVista}
-            onGuardarPresupuesto={guardarPresupuesto}
-          />
+          <div className="ex-split-35-65">
+            <BudgetPanel
+              categorias={categoriasVista}
+              gastosDelMes={gastosVista}
+              budgets={budgetsVista}
+              onGuardarPresupuesto={guardarPresupuesto}
+            />
 
-          <ExpenseTable
-            gastos={gastosVista}
-            nombreCategoria={nombreCategoria}
-            onEditar={editar}
-            onEliminar={(id) => {
-              expensesApi.expenses
-                .remove(DEV_USER_ID, id)
-                .then(() => cargar())
-                .catch((e) => setAviso(errorMessage(e, 'No se pudo eliminar el gasto')))
-            }}
-          />
+            <ExpenseTable
+              gastos={gastosVista}
+              nombreCategoria={nombreCategoria}
+              onEditar={editar}
+              onEliminar={(id) => {
+                expensesApi.expenses
+                  .remove(DEV_USER_ID, id)
+                  .then(() => cargar())
+                  .catch((e) => setAviso(errorMessage(e, 'No se pudo eliminar el gasto')))
+              }}
+            />
+          </div>
 
-          <MonthSavingsPanel
-            key={`aho-${mk}`}
-            filas={data.ahorro.filas}
-            sugerencias={data.sugerenciasAhorro}
-            onSave={(ahorros) =>
-              guardarBloque('el ahorro', expensesApi.months.saveSavings(DEV_USER_ID, anio, mes, ahorros))
-            }
-          />
+          <div className="ex-blocks-grid">
+            <MonthSavingsPanel
+              key={`aho-${mk}`}
+              filas={data.ahorro.filas}
+              sugerencias={data.sugerenciasAhorro}
+              onSave={(ahorros) =>
+                guardarBloque('el ahorro', expensesApi.months.saveSavings(DEV_USER_ID, anio, mes, ahorros))
+              }
+            />
 
-          <DebtsPanel
-            key={`deu-${mk}`}
-            filas={data.deudas.filas}
-            sugerencias={data.sugerenciasDeudas}
-            onSave={(deudas) =>
-              guardarBloque('las deudas', expensesApi.months.saveDebts(DEV_USER_ID, anio, mes, deudas))
-            }
-          />
+            <DebtsPanel
+              key={`deu-${mk}`}
+              filas={data.deudas.filas}
+              sugerencias={data.sugerenciasDeudas}
+              onSave={(deudas) =>
+                guardarBloque('las deudas', expensesApi.months.saveDebts(DEV_USER_ID, anio, mes, deudas))
+              }
+            />
+          </div>
         </>
       )}
 

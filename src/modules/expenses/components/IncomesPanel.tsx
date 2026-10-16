@@ -38,6 +38,13 @@ export default function IncomesPanel({ anio, mes, filas, sugerencias, onSave }: 
   const set = (key: string, patch: Partial<Draft>) =>
     setRows((rs) => rs.map((r) => (r.key === key ? { ...r, ...patch } : r)))
 
+  const quitar = (key: string) => {
+    const row = rows.find((x) => x.key === key)
+    const nombre = row?.categoria.trim() || 'esta fila'
+    if (!key.startsWith('nueva-') && !window.confirm(`¿Quitar el ingreso "${nombre}"? Se eliminará al guardar el mes.`)) return
+    setRows((rs) => rs.filter((x) => x.key !== key))
+  }
+
   const numOrNull = (t: string, campo: string): number | null => {
     if (t.trim() === '') return null
     const n = parseNumber(t)
@@ -48,7 +55,7 @@ export default function IncomesPanel({ anio, mes, filas, sugerencias, onSave }: 
   const guardar = () => {
     try {
       const items = rows.map((r) => {
-        if (r.fechaInvalida) throw new Error('Revisa las fechas (formato dd/mm/aaaa).')
+        if (r.fechaInvalida) throw new Error('Revisa las fechas.')
         if (r.categoria.trim() === '') throw new Error('Toda fila necesita categoría.')
         const fecha = r.fecha.trim() === '' ? null : r.fecha.trim()
         if (fecha !== null && !fecha.startsWith(prefijoMes)) throw new Error('La fecha debe estar dentro del mes.')
@@ -146,8 +153,8 @@ export default function IncomesPanel({ anio, mes, filas, sugerencias, onSave }: 
                   />
                 </td>
                 <td>
-                  <button className="secondary sm" onClick={() => setRows((rs) => rs.filter((x) => x.key !== r.key))} aria-label="Quitar fila">
-                    🗑
+                  <button className="remove" onClick={() => quitar(r.key)} aria-label="Quitar fila">
+                    ✕
                   </button>
                 </td>
               </tr>

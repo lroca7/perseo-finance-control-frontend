@@ -38,3 +38,13 @@
 .ex-modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .ex-new-cat { display: flex; gap: 8px; margin-bottom: 12px; }
 .ex-new-cat input { flex: 1; }
+
+/* Bloques mensuales en 2 columnas (ingresos+facturas, ahorro+deudas). */
+.ex-blocks-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
+.ex-blocks-grid > .panel { margin-bottom: 0; min-width: 0; }
+@media (max-width: 900px) { .ex-blocks-grid { grid-template-columns: 1fr; } }
+
+/* Presupuesto (35%) + listado de gastos (65%). */
+.ex-split-35-65 { display: grid; grid-template-columns: minmax(0, 35fr) minmax(0, 65fr); gap: 16px; margin-bottom: 16px; align-items: start; }
+.ex-split-35-65 > .panel { margin-bottom: 0; min-width: 0; }
+@media (max-width: 900px) { .ex-split-35-65 { grid-template-columns: 1fr; } }

@@ -188,7 +188,8 @@ export default function CardDetailPage() {
     }
   }
 
-  const eliminarExtracto = async (statementId: string) => {
+  const eliminarExtracto = async (statementId: string, detalle: string) => {
+    if (!window.confirm(`¿Eliminar ${detalle}?`)) return
     try {
       await statementsApi.eliminar(statementId)
       cargar()
@@ -455,7 +456,7 @@ export default function CardDetailPage() {
                     <td className="num">{fmt(s.cuotaManejo)}</td>
                     <td className="num">{fmt(s.otrosCargos)}</td>
                     <td>
-                      <button className="remove" onClick={() => eliminarExtracto(s.id)}>✕</button>
+                      <button className="remove" onClick={() => eliminarExtracto(s.id, `el extracto ${s.periodoInicio} → ${s.periodoFin}`)}>✕</button>
                     </td>
                   </tr>
                 ))}

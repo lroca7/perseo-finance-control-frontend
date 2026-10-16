@@ -125,14 +125,16 @@ export default function CategoriesModal({ categorias, usos, abierto, onCerrar, o
                         {c.activa ? '⏸' : '▶'}
                       </button>{' '}
                       <button
-                        className="secondary sm"
+                        className="remove"
                         title={n > 0 ? 'Solo se puede eliminar sin gastos asociados' : 'Eliminar'}
+                        aria-label={`Eliminar categoría ${c.nombre}`}
                         onClick={() => {
+                          if (!window.confirm(`¿Eliminar la categoría "${c.nombre}"?`)) return
                           const msg = onEliminar(c.id)
                           setError(msg)
                         }}
                       >
-                        🗑
+                        ✕
                       </button>
                     </td>
                   </tr>

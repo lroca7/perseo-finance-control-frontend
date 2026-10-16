@@ -49,6 +49,13 @@ export default function BillsPanel({ anio, mes, filas, categorias, onSave, onGes
   const set = (key: string, patch: Partial<Draft>) =>
     setRows((rs) => rs.map((r) => (r.key === key ? { ...r, ...patch } : r)))
 
+  const quitar = (key: string) => {
+    const row = rows.find((x) => x.key === key)
+    const nombre = categorias.find((c) => c.id === row?.categoriaId)?.nombre || 'esta fila'
+    if (!key.startsWith('nueva-') && !window.confirm(`¿Quitar la factura "${nombre}"? Se eliminará al guardar el mes.`)) return
+    setRows((rs) => rs.filter((x) => x.key !== key))
+  }
+
   const numOrNull = (t: string, campo: string): number | null => {
     if (t.trim() === '') return null
     const n = parseNumber(t)
@@ -59,7 +66,7 @@ export default function BillsPanel({ anio, mes, filas, categorias, onSave, onGes
   const guardar = () => {
     try {
       const items = rows.map((r) => {
-        if (r.fechaInvalida) throw new Error('Revisa las fechas (formato dd/mm/aaaa).')
+        if (r.fechaInvalida) throw new Error('Revisa las fechas.')
         if (!r.categoriaId) throw new Error('Toda fila necesita categoría.')
         const fecha = r.fecha.trim() === '' ? null : r.fecha.trim()
         if (fecha !== null && !fecha.startsWith(prefijoMes)) throw new Error('La fecha debe estar dentro del mes.')
@@ -183,8 +190,8 @@ export default function BillsPanel({ anio, mes, filas, categorias, onSave, onGes
                   />
                 </td>
                 <td>
-                  <button className="secondary sm" onClick={() => setRows((rs) => rs.filter((x) => x.key !== r.key))} aria-label="Quitar fila">
-                    🗑
+                  <button className="remove" onClick={() => quitar(r.key)} aria-label="Quitar fila">
+                    ✕
                   </button>
                 </td>
               </tr>
